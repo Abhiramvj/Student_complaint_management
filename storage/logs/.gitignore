@@ -1,2 +1,38 @@
-*
-!.gitignore
+# Node modules and build
+/node_modules
+/public/hot
+/public/storage
+/public/build
+
+# Laravel specific
+/vendor
+/storage/*.key
+/storage/oauth-private.key
+/storage/oauth-public.key
+/storage/debugbar
+/storage/logs
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+
+# Environment & debug
+.env
+.env.*
+.phpunit.result.cache
+.phpunit.cache
+Homestead.yaml
+Homestead.json
+npm-debug.log
+yarn-error.log
+auth.json
+
+# IDEs/editors
+/.vscode
+/.idea
+/.fleet
+/.zed
+/.phpactor.json
+
+# Others
+.DS_Store
+Thumbs.db
