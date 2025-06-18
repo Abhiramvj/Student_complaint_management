@@ -7,6 +7,7 @@ use App\Jobs\SendComplaintNotification;
 use App\Mail\ComplaintSubmitted;
 use App\Models\Complaint;
 use App\Models\Department;
+use App\View\Components\StatusBadge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -94,5 +95,33 @@ public function recentFilter(Request $request)
 
         return redirect()->back()->with('success','Complaint submitted successfully!');
     }
+
+        public function showAJAX($id) {
+        $complaint = Complaint::with('department')->findOrFail($id);
+          $statuses = ['pending', 'in_progress', 'resolved'];
+    return view('student.partials.details', compact('complaint','statuses'));
+
+    }
+
+     public function update(Request $request,$id)
+{
+
+    $request->validate([
+        'status' => 'required|in:pending,in_progress,resolved',
+    ]);
+
+    $complaint = Complaint::findOrFail($id);
+    $complaint->status = $request->status;
+    $complaint->save();
+
+    $component = new StatusBadge($complaint->status);
+    $view = $component->render();
+    $badgeHtml = $view->with(['status' => $complaint->status])->render();
+
+
+    return response()->json(['success' => 'true',
+    'badge_html' => $badgeHtml]);
+}
+
 
 }

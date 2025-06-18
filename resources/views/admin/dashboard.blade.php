@@ -8,7 +8,9 @@
     </x-slot>
 
     <x-admindashboard>
+        
     </x-admindashboard>
+
 </x-app-layout>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

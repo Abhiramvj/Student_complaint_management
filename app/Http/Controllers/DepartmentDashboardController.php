@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\SendResponse;
 use App\Models\Complaint;
 use App\Models\ComplaintResponse;
+use App\View\Components\StatusBadge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,18 +51,24 @@ class DepartmentDashboardController extends Controller
 }
 
 
-    public function update(Request $request, Complaint $complaint)
+    public function update(Request $request,$id)
 {
 
     $request->validate([
         'status' => 'required|in:pending,in_progress,resolved',
     ]);
 
-    // $complaint = Complaint::findOrFail($id);
+    $complaint = Complaint::findOrFail($id);
     $complaint->status = $request->status;
     $complaint->save();
 
-    return response()->json(['message' => 'Status updated']);
+    $component = new StatusBadge($complaint->status);
+    $view = $component->render();
+    $badgeHtml = $view->with(['status' => $complaint->status])->render();
+
+
+    return response()->json(['success' => 'true',
+    'badge_html' => $badgeHtml]);
 }
 
 public function recent()
@@ -122,6 +129,13 @@ public function storeResponse(Request $request, $id)
         SendResponse::dispatch($complaint,$response);
 
         return response()->json(['success' => true]);
+
+    }
+
+    public function showAJAX($id) {
+        $complaint = Complaint::with('department')->findOrFail($id);
+          $statuses = ['pending', 'in_progress', 'resolved'];
+    return view('department.partials.details', compact('complaint','statuses'));
 
     }
 }

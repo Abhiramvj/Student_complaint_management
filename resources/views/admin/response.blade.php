@@ -58,7 +58,7 @@
 
     console.log("Complaint ID being sent:", id); // ✅ check this in browser console
 
-    $.post(`/department/dashboard/all/${id}/response`, {
+    $.post(`/admin/dashboard/all/${id}/response`, {
         _token: '{{ csrf_token() }}',
         message: message
     })

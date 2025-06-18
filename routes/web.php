@@ -36,6 +36,10 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::delete('/admin/dashboard/department/{id}/delete',[AdminDepartmentController::class,'destroy'])->name('admin.department.destroy');
     Route::get('/admin/dashboard/student',[AdminStudentController::class,'index'])->name('admin.student.index');
     Route::delete('/admin/dashboard/student/{id}/delete',[AdminStudentController::class,'destroy'])->name('admin.student.destroy');
+    Route::get('/admin/dashboard/complaints/{id}',[AdminDashboardController::class,'showAJAX'])->name('.view.complaints');
+    Route::patch('/admin/complaints/{id}/status', [AdminDashboardController::class, 'updateStatus'])->name('admin.complaints.updateStatus');
+     Route::get('/admin/dashboard/all/{id}/response',[AdminDashboardController::class,'response'])->name('admin.response');
+     Route::post('/admin/dashboard/all/{id}/response', [AdminDashboardController::class, 'storeResponse'])->name('admin.response.store');
 });
 
 
@@ -45,17 +49,18 @@ Route::middleware(['auth','role:admin'])->group(function () {
         Route::get('/student/recent/filter', [StudentDashboardController::class, 'recentFilter'])->name('student.recent.filter');
         Route::get('/student/dashboard/complaint',[StudentDashboardController::class,'create'])->name('student.complaint');
         Route::post('student/dashboard/complaint',[StudentDashboardController::class,'store'])->name('student.complaint.submit');
+        Route::get('/student/dashboard/complaints/{id}',[StudentDashboardController::class,'showAJAX'])->name('student.view.complaints');
+
     });
 
 Route::middleware(['auth','role:department_head'])->group(function () {
     Route::get('/department/dashboard',[DepartmentDashboardController::class,'index'])->name('department.dashboard');
     Route::get('/department/dashboard/main',[DepartmentDashboardController::class,'recent'])->name('department.recent');
     Route::get('/department/dashboard/all',[DepartmentDashboardController::class,'all'])->name('department.all');
-    Route::patch('/complaints/{complaint}/status', [DepartmentDashboardController::class, 'update'])->name('complaints.updateStatus');
+    Route::patch('department/complaints/{id}/status', [DepartmentDashboardController::class, 'update'])->name('department.complaints.updateStatus');
     Route::get('/department/dashboard/all/{id}/response',[DepartmentDashboardController::class,'response'])->name('department.response');
     Route::post('/department/dashboard/all/{id}/response', [DepartmentDashboardController::class, 'storeResponse'])->name('department.response.store');
     Route::get('/department/dashboard/filter', [DepartmentDashboardController::class, 'filter'])->name('department.dashboard.filter');
-
-
+    Route::get('/department/dashboard/complaints/{id}',[DepartmentDashboardController::class,'showAJAX'])->name('department.view.complaints');
 
 });
